@@ -1,8 +1,12 @@
 const express = require('express');
-const bodyParser = require('body-parser'); 
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
 
 // create express app
 const app = express();
+
+app.use(cors())
 
 // Setup server port
 const port = process.env.PORT || 5000;
@@ -20,9 +24,13 @@ app.get('/', (req, res) => {
 
 // Require employee routes
 const employeeRoutes = require('./src/routes/employee.routes')
+const userRutes = require('./src/routes/user.routes')
+
 
 // using as middleware
 app.use('/api/v1/employees', employeeRoutes)
+app.use('/register', userRutes)
+
 
 // listen for requests
 app.listen(port, () => {

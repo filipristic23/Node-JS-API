@@ -3,14 +3,14 @@
 var dbConn = require('./../../config/db.config');
 
 var Employee = function(employee){
-    this.productName         = employee.productName;
-    this.ProductDescription  = employee.ProductDescription;
-    this.ProductPrice        = employee.ProductPrice;
+    this.name         = employee.name;
+    this.email  = employee.email;
+    this.password        = employee.password;
 };
 
 Employee.create = function(newEmp, result){
 
-    dbConn.query("INSERT INTO user set ?", newEmp, function (err, res){
+    dbConn.query("INSERT INTO admin set ?", newEmp, function (err, res){
 
         if(err){
             console.log("error: ", err);
@@ -31,7 +31,7 @@ Employee.create = function(newEmp, result){
 
 Employee.findById = function(id, result){
 
-    dbConn.query("Select * from user where id = ?" ,id, function(err, res){
+    dbConn.query("Select * from admin where idadmin = ?" ,id, function(err, res){
 
         if(err){
             console.log("error: ",err);
@@ -49,7 +49,7 @@ Employee.findById = function(id, result){
 
 Employee.findAll = function(result){
 
-    dbConn.query("SELECT * FROM user", function(err, res){
+    dbConn.query("SELECT * FROM admin", function(err, res){
 
         if(err){
             console.log("error: ",err);
@@ -65,8 +65,8 @@ Employee.findAll = function(result){
 };
 
 Employee.update = function(id, employee, result){
-    dbConn.query("UPDATE user SET productName=?,ProductDescription=?,ProductPrice=? WHERE id=?",
-    [employee.productName,employee.ProductDescription,employee.ProductPrice,id],
+    dbConn.query("UPDATE admin SET name=?,email=?,password=? WHERE idadmin=?",
+    [employee.name,employee.email,employee.password,id],
     function(err, res){
 
         if(err){
@@ -81,7 +81,7 @@ Employee.update = function(id, employee, result){
 };
 
 Employee.delete = function(id, result){
-    dbConn.query("DELETE FROM user WHERE id =?", [id], function(err, res){
+    dbConn.query("DELETE FROM admin WHERE idadmin =?", [id], function(err, res){
 
         if(err){
             console.log("error: ", err);
@@ -94,5 +94,7 @@ Employee.delete = function(id, result){
 
     });
 };
+
+
 
 module.exports= Employee;
