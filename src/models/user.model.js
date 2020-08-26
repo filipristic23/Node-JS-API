@@ -3,14 +3,15 @@
 var dbConn = require('./../../config/db.config');
 
 var Employee = function(employee){
-    this.name         = employee.name;
-    this.email  = employee.email;
-    this.password        = employee.password;
+    this.name       = employee.name;
+    this.email      = employee.email;
+    this.password   = employee.password;
+    this.city       = employee.city;
 };
 
 Employee.create = function(newEmp, result){
 
-    dbConn.query("INSERT INTO admin2 set ?", newEmp, function (err, res){
+    dbConn.query("INSERT INTO admin4 set ?", newEmp, function (err, res){
 
         if(err){
             console.log("error: ", err);
@@ -31,7 +32,7 @@ Employee.create = function(newEmp, result){
 
 Employee.findById = function(id, result){
 
-    dbConn.query("Select * from admin2 where id = ?" ,id, function(err, res){
+    dbConn.query("Select * from admin4 where id = ?" ,id, function(err, res){
 
         if(err){
             console.log("error: ",err);
@@ -49,7 +50,7 @@ Employee.findById = function(id, result){
 
 Employee.findAll = function(result){
 
-    dbConn.query("SELECT * FROM admin2", function(err, res){
+    dbConn.query("SELECT * FROM admin4 JOIN city ON admin4.city=city.idcity", function(err, res){
 
         if(err){
             console.log("error: ",err);
@@ -65,8 +66,8 @@ Employee.findAll = function(result){
 };
 
 Employee.update = function(id, employee, result){
-    dbConn.query("UPDATE admin SET name=?,email=?,password=? WHERE id=?",
-    [employee.name,employee.email,employee.password,id],
+    dbConn.query("UPDATE admin SET name=?,email=?,password=?,city=? WHERE id=?",
+    [employee.name,employee.email,employee.password,employee.city,id],
     function(err, res){
 
         if(err){
@@ -81,7 +82,7 @@ Employee.update = function(id, employee, result){
 };
 
 Employee.delete = function(id, result){
-    dbConn.query("DELETE FROM admin2 WHERE id =?", [id], function(err, res){
+    dbConn.query("DELETE FROM admin4 WHERE id =?", [id], function(err, res){
 
         if(err){
             console.log("error: ", err);

@@ -11,10 +11,11 @@ exports.register = async function(req,res){
     var users={
        "name":req.body.name,
        "email":req.body.email,
-       "password":encryptedPassword
+       "password":encryptedPassword,
+       "city":req.body.city
      }
     
-    db.query('INSERT INTO admin2 SET ?',users, function (error, results, fields) {
+    db.query('INSERT INTO admin4 SET ?',users, function (error, results, fields) {
       if (error) {
         res.send({
           "code":400,

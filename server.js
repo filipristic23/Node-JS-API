@@ -26,12 +26,14 @@ app.get('/', (req, res) => {
 const employeeRoutes = require('./src/routes/employee.routes')
 const loginRutes = require('./src/routes/login.routes')
 const userRoutes = require('./src/routes/user.routes')
+const cityRoutes = require('./src/routes/city-get.routes')
 
 
 // using as middleware
 app.use('/api/v1/employees', employeeRoutes)
 app.use('/register', loginRutes)
 app.use('/users', userRoutes)
+app.use('/get', cityRoutes)
 
 // listen for requests
 app.listen(port, () => {

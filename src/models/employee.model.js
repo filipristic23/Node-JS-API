@@ -4,8 +4,8 @@ var dbConn = require('./../../config/db.config');
 
 var Employee = function(employee){
     this.name         = employee.name;
-    this.email  = employee.email;
-    this.password        = employee.password;
+    this.email        = employee.email;
+    this.password     = employee.password;
 };
 
 Employee.create = function(newEmp, result){
