@@ -1,5 +1,5 @@
 // middleware/users.js
-
+const db = require('../../config/db.config');
 module.exports = {
     validateRegister: (req, res, next) => {
       // username min length 3
@@ -25,7 +25,8 @@ module.exports = {
           msg: 'Both passwords must match'
         });
       }
-  
+
+        
       next();
     }
   };

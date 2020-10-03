@@ -1,12 +1,12 @@
 const express = require('express'); 
-
+const jwtMiddleweare = require('../middlewares/jwt.middleware');
 
 const router = express.Router()
 
 const employeeController =   require('../controllers/employee.controller');
 
 // Retrieve all employees
-router.get('/', employeeController.findAll);
+router.get('/',jwtMiddleweare.verifyToken, employeeController.findAll);
 
 // Create a new employee
 router.post('/', employeeController.create);

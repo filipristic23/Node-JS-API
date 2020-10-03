@@ -1,6 +1,7 @@
 var db = require('../../config/db.config');
 var express    = require('express');
 var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
 
 
 //REGISTRACIJA KORISNIKA
@@ -14,6 +15,8 @@ exports.register = async function(req,res){
        "password":encryptedPassword,
        "city":req.body.city
      }
+
+  
     
     db.query('INSERT INTO admin4 SET ?',users, function (error, results, fields) {
       if (error) {
@@ -28,12 +31,67 @@ exports.register = async function(req,res){
             });
         }
     });
+     
   }
+  
+ //LOGOVANJE KORISNIKA
+    exports.login = async function(req,res){
+ 
+      db.query(
+        `SELECT * FROM admin2 WHERE name = ${db.escape(req.body.name)};`,
+        (err, result) => {
+          // user does not exists
+          if (err) {
+            throw err;
+            return res.status(400).send({
+              msg: err
+            });
+          }
+          if (!result.length) {
+            return res.status(401).send({
+              msg: 'Username or password is incorrect!'
+            });
+          }
+          // check password
+          bcrypt.compare(
+            req.body.password,
+            result[0]['password'],
+            (bErr, bResult) => {
+              // wrong password
+              if (bErr) {
+                throw bErr;
+                return res.status(401).send({
+                  msg: 'Username or password is incorrect!'
+                });
+              }
+              if (bResult) {
+                const token = jwt.sign({
+                    name: result[0].name,
+                    id: result[0].id
+                  },
+                  'SECRETKEY', {
+                    expiresIn: '7d'
+                  }
+                );
+               
+                return res.status(200).send({
+                  msg: 'Logged in!',
+                  token,
+                  user: result[0]
+                });
+              }
+              return res.status(401).send({
+                msg: 'Username or password is incorrect!'
+              });
+            }
+          );
+        }
+      );
+      }
 
 
-
-//LOGIN KORISNIKA
-  exports.login = async function(req,res){
+      //LOGIN KORISNIKA
+ /* exports.login = async function(req,res){
     var name = req.body.name;
     var email= req.body.email;
     var password = req.body.password;
@@ -44,15 +102,26 @@ exports.register = async function(req,res){
           "code":400,
           "failed":"error ocurred"
         })
-      }else{
         
+      }else{
         if(results.length >0){
           const comparision = await bcrypt.compare(password, results[0].password)
           if(comparision){
-              res.send({
+            let token = jwt.sign({
+              name: result[0].name,
+              userId: result[0].id
+            },"mak4rak666",{
+              expiresIn:"1h"
+            });
+            return res.status(200).send({
+              msg: 'Logged in!',
+              token,
+              result:[0]
+            });
+             -- res.send({
                 "code":200,
                 "success":"login sucessfull"
-              })
+              })--
           }
           else{
             res.send({
@@ -70,5 +139,5 @@ exports.register = async function(req,res){
         }
       } 
       });
-    }
+    } */
   
