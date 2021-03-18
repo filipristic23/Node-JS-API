@@ -2,6 +2,11 @@ var db = require('../../config/db.config');
 var express    = require('express');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+var crypto = require('crypto');
+var nodemailer = require('nodemailer');
+const { POINT_CONVERSION_COMPRESSED } = require('constants');
+
+
 
 
 //REGISTRACIJA KORISNIKA
@@ -12,13 +17,17 @@ exports.register = async function(req,res){
     var users={
        "name":req.body.name,
        "email":req.body.email,
+      /* "email_token":crypto.randomBytes(64).toString('hex'),*/
        "password":encryptedPassword,
-       "city":req.body.city
+       "age":req.body.age,
+       "gender":req.body.gender,
+       "class":req.body.klasa,
+      // "is_verfy":false
      }
 
   
     
-    db.query('INSERT INTO admin4 SET ?',users, function (error, results, fields) {
+    db.query('INSERT INTO date_users4 SET ?',users, function (error, results, fields) {
       if (error) {
         res.send({
           "code":400,
@@ -27,18 +36,82 @@ exports.register = async function(req,res){
       } else {
         res.send({
           "code":200,
-          "success":"user registered sucessfully"
+          "success":"user registered sucessfully" 
             });
         }
     });
+
+    //Varified email
+    let transporter = nodemailer.createTransport({
+      service: 'protonmail',
+      auth:{
+        user:'f.ristic@protonmail.com',
+        pass:'mak4rak666'
+      }
+    
+    });
+    let mailOptions = {
+      from:'f.ristic@protonmail.com',
+      to:'filipristic2@gmail.com',
+      subject:'Ide kuracccc',
+      text:'Radiii'
+    }
+
+    transporter.sendEmail(mailOptions, function(){
+      if(err){
+        res.status(401).send({
+          msg:'Greska'
+        })
+      }else{
+        res.status(200).send({
+          msg:'dobarrrrr'
+        })
+      }
+    });
+    
      
   }
+
+  //EMAIL VERIFICATION ROUTE
+  exports.verify = async function(req,res, next){
+
+    let transporter = nodemailer.createTransport({
+      service: 'protonmail',
+      auth:{
+        user:'f.ristic@protonmail.com',
+        pass:'mak4rak666'
+      }
+    
+    });
+    let mailOptions = {
+      from:'f.ristic@protonmail.com',
+      to:'filipristic2@gmail.com',
+      subject:'Ide mail',
+      text:'Radiii'
+    }
+
+    transporter.sendEmail(mailOptions, function(error, info){
+      if(error){
+        res.status(401).send({
+          msg:'Greska'
+        })
+      }else{
+        res.status(200).send({
+          msg:'dobarrrrr'
+        })
+      }
+    });
+
+  } 
+  
+
+
   
  //LOGOVANJE KORISNIKA
     exports.login = async function(req,res){
  
       db.query(
-        `SELECT * FROM admin2 WHERE name = ${db.escape(req.body.name)};`,
+        `SELECT * FROM date_users4 WHERE name = ${db.escape(req.body.name)};`,
         (err, result) => {
           // user does not exists
           if (err) {
@@ -77,7 +150,9 @@ exports.register = async function(req,res){
                 return res.status(200).send({
                   msg: 'Logged in!',
                   token,
-                  user: result[0]
+                  user: result[0],
+                  
+                  
                 });
               }
               return res.status(401).send({
@@ -140,4 +215,38 @@ exports.register = async function(req,res){
       } 
       });
     } */
+
+
+    /* var msg ={
+      from:'f.ristic@protonmail.com',
+      to: user.email,
+      subject:'My dates - verfy your account',
+      text:`
+        Hello, tenx for frgistring on our site.
+        Please copy and paste the adress bellow.
+        http://${req.headers.host}/verfy-email?token=${user.email_token}
+      `,
+      html:`
+      <h1>Hello,</h1> 
+      <p>Thanks for registring on our site.</p>
+      <p>Please click link below to verify your account.</p>
+      <a href="http://${req.headers.host}/verfy-email?token=${user.email_token}" >Verify your account</a>
+      `
+    }
+
+    try{
+      await sgMail.send(msg);
+      req.flash('success','Thanks for registring.Please check your email adres.')
+      res.status(200).send({
+        msg:'Uspjeh'
+      })
+    } catch(error){
+      console.log(error);
+      res.status(401).send({
+        msg:'Ovo je greska'
+      })
+    }
+
+     
+  }*/
   
