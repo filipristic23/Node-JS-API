@@ -19,3 +19,21 @@ exports.findAll = function(req, res){
     });    
     
     };
+
+    exports.findUser = function(req, res){
+
+        City.findUser(function(err, city) {
+        
+            console.log('controller')
+        
+            if(err)
+        
+            res.send(err);
+        
+            console.log('res', city);
+        
+            res.send(city);
+        
+        });    
+        
+        };

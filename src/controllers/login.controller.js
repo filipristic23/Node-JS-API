@@ -14,20 +14,21 @@ exports.register = async function(req,res){
     const password = req.body.password;
     const saltRounds = 10;
     const encryptedPassword = await bcrypt.hash(password, saltRounds)
+    
     var users={
-       "name":req.body.name,
+       "name":req.body.name, 
        "email":req.body.email,
       /* "email_token":crypto.randomBytes(64).toString('hex'),*/
        "password":encryptedPassword,
        "age":req.body.age,
        "gender":req.body.gender,
        "class":req.body.klasa,
-      // "is_verfy":false
+      // "is_verfy":false 
      }
 
   
     
-    db.query('INSERT INTO date_users4 SET ?',users, function (error, results, fields) {
+    db.query('INSERT INTO users SET ?',users, function (error, results, fields) {
       if (error) {
         res.send({
           "code":400,
@@ -42,67 +43,9 @@ exports.register = async function(req,res){
     });
 
     //Varified email
-    let transporter = nodemailer.createTransport({
-      service: 'protonmail',
-      auth:{
-        user:'f.ristic@protonmail.com',
-        pass:'mak4rak666'
-      }
-    
-    });
-    let mailOptions = {
-      from:'f.ristic@protonmail.com',
-      to:'filipristic2@gmail.com',
-      subject:'Ide kuracccc',
-      text:'Radiii'
-    }
-
-    transporter.sendEmail(mailOptions, function(){
-      if(err){
-        res.status(401).send({
-          msg:'Greska'
-        })
-      }else{
-        res.status(200).send({
-          msg:'dobarrrrr'
-        })
-      }
-    });
-    
-     
-  }
-
-  //EMAIL VERIFICATION ROUTE
-  exports.verify = async function(req,res, next){
-
-    let transporter = nodemailer.createTransport({
-      service: 'protonmail',
-      auth:{
-        user:'f.ristic@protonmail.com',
-        pass:'mak4rak666'
-      }
-    
-    });
-    let mailOptions = {
-      from:'f.ristic@protonmail.com',
-      to:'filipristic2@gmail.com',
-      subject:'Ide mail',
-      text:'Radiii'
-    }
-
-    transporter.sendEmail(mailOptions, function(error, info){
-      if(error){
-        res.status(401).send({
-          msg:'Greska'
-        })
-      }else{
-        res.status(200).send({
-          msg:'dobarrrrr'
-        })
-      }
-    });
-
   } 
+  //EMAIL VERIFICATION ROUTE
+  
   
 
 
@@ -111,7 +54,7 @@ exports.register = async function(req,res){
     exports.login = async function(req,res){
  
       db.query(
-        `SELECT * FROM date_users4 WHERE name = ${db.escape(req.body.name)};`,
+        `SELECT * FROM users WHERE name = ${db.escape(req.body.name)};`,
         (err, result) => {
           // user does not exists
           if (err) {
@@ -122,19 +65,19 @@ exports.register = async function(req,res){
           }
           if (!result.length) {
             return res.status(401).send({
-              msg: 'Username or password is incorrect!'
+              msg: 'Username or password is incorrect!' 
             });
           }
           // check password
           bcrypt.compare(
             req.body.password,
-            result[0]['password'],
+            result[0]['password'], 
             (bErr, bResult) => {
               // wrong password
               if (bErr) {
                 throw bErr;
                 return res.status(401).send({
-                  msg: 'Username or password is incorrect!'
+                  msg: 'Username or password is incorrect!' 
                 });
               }
               if (bResult) {

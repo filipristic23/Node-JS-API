@@ -1,5 +1,5 @@
 var multer = require('multer');
-
+//promjenio image u image_name
 module.exports.image={
     storage:function(){
         var storage = multer.diskStorage({

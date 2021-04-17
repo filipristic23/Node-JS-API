@@ -15,8 +15,15 @@ const imageController =   require('../controllers/get-image.controller');
 // Retrieve a single employee with id
 router.get('/:id', imageController.findById);
 
+router.get('/image/:path', imageController.getImage); 
+
+router.get('/multiple/:id', imageController.findMultiple); 
+
+router.put('/delete', imageController.delete);
+
+router.put('/online', imageController.online);
+
+router.put('/ofline', imageController.ofline);
 
 
-
-
-module.exports = router
+module.exports = router 

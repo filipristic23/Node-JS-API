@@ -22,7 +22,7 @@ Employee.findAll(function(err, employee) {
 
 exports.create = function(req, res){
 
-    const new_employee = new Employee(req.body);
+    const new_employee = new Employee(req.body); 
 
 //handles null error
 

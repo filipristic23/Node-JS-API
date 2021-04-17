@@ -25,4 +25,22 @@ City.findAll = function(result){
     });
 };
 
+City.findUser = function(result){
+
+    dbConn.query("SELECT * FROM users", function(err, res){
+
+        if(err){
+            console.log("error: ",err);
+
+            result(null, err);
+        }
+        else{
+            console.log('citys : ', res);
+
+            result(null, res)
+        }
+    });
+};
+
+
 module.exports= City;

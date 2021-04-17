@@ -13,7 +13,7 @@ Employee.create = function(newEmp, result){
     dbConn.query("INSERT INTO admin set ?", newEmp, function (err, res){
 
         if(err){
-            console.log("error: ", err);
+            console.log("error: ", err); 
 
             result(err, null);
 

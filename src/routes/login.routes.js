@@ -10,6 +10,6 @@ router.post('/', userMiddleweare.validateRegister, employeeController.register);
 
 router.post('/login', employeeController.login);
 
-router.post('/veri', employeeController.verify);
+
 
 module.exports = router
